@@ -26,7 +26,7 @@ def wall_time(N):
     d_c = cuda.device_array_like(d_a)
 
     # Kernel launch
-    threads_per_block = 256
+    threads_per_block = 1024
     blocks_per_grid = (N + threads_per_block - 1) // threads_per_block
     add_arrays[blocks_per_grid, threads_per_block](d_a, d_b, d_c)
 
@@ -44,6 +44,14 @@ def wall_time(N):
     print(f"Array add of size {N} using for loop is {time_normal} seconds")
     return time_cuda, time_normal
 
+def show_devices():
+    gpus = cuda.gpus
+    print(f"CUDA GPUs : {gpus}")
+    for idx in range(len(gpus)):
+        print(f"  GPU[{idx}] : {gpus[idx]}")
+        print(f"    Device Context : {cuda.current_context(idx)}")
+
+show_devices()
 array_size = []
 size = 1
 for idx in range(9):
