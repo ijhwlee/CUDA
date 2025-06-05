@@ -50,7 +50,12 @@ def show_devices():
     for idx in range(len(gpus)):
         print(f"  GPU[{idx}] : {gpus[idx]}")
         print(f"    Device Context : {cuda.current_context(idx)}")
+        print(f"    Device Id : {gpus[idx].id}")
+        print(f"    Device Name : {gpus[idx].name}")
+        print(f"    Device Capability : {gpus[idx].compute_capability}")
+        print(f"    Device Memory : {cuda.current_context(idx).get_memory_info()}")
 
+cuda.detect()
 show_devices()
 array_size = []
 size = 1
