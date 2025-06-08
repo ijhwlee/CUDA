@@ -33,7 +33,7 @@ def rgb2gray_numba(x):
     y = np.zeros(n).astype(np.uint8)
     d_x = cuda.to_device(x)
     d_y = cuda.to_device(y)
-    threads_per_block = 1024
+    threads_per_block = 512
     blocks_per_grid = (n + threads_per_block - 1)//threads_per_block
     rgb2gray_kernel[blocks_per_grid, threads_per_block](d_x, d_y)
     y = d_y.copy_to_host()
