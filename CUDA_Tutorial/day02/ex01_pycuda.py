@@ -14,6 +14,18 @@ def print_elapsed(elapsed):
     else:
         print(f"Elapsed time : {elapsed:.3f} seconds.")
 
+# define python array double code with numpy
+def double_array(a):
+    b = a * 2
+    return b
+
+# define python array double code with for loop
+def double_array_for(a):
+    b = np.empty_like(a)
+    for i in range(len(a)):
+        b[i] = 2 * a[i]
+    return b
+
 N = 16
 BLOCK_SIZE = 1
 
@@ -61,3 +73,24 @@ print(f"Doubled : {a_doubled}")
 print(f"Size = {N}")
 print_elapsed(end - start)
 
+# calculation by numpy
+start = time.perf_counter()
+b = double_array(a)
+end = time.perf_counter()
+
+# Print the original and result
+print(f"Original : {a}")
+print(f"Doubled : {a_doubled}")
+print(f"Size = {N}, result with numpy")
+print_elapsed(end - start)
+
+# calculation by for loop
+start = time.perf_counter()
+b = double_array_for(a)
+end = time.perf_counter()
+
+# Print the original and result
+print(f"Original : {a}")
+print(f"Doubled : {a_doubled}")
+print(f"Size = {N}, result with for loop")
+print_elapsed(end - start)
