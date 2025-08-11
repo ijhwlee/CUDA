@@ -61,6 +61,23 @@ int main()
   {
     printf("Elapsed time : %.3f seconds.\n", elapsed_time);
   }
+  start = clock();
+  for(int idx = 0; idx < N; idx++)
+  {
+    c[idx] = a[idx] + b[idx];
+  }
+  end = clock();
+  k = rand()%N;
+  printf("Result: c[%d] is %d, a[%d] = %d, b[%d] = %d\n", k, c[k], k, a[k], k, b[k]);
+  elapsed_time = ((double)(end - start)) / CLOCKS_PER_SEC;
+  if (elapsed_time < 0.01)
+  {
+    printf("Elapsed time : %.3f milli seconds.\n", elapsed_time*1000);
+  }
+  else
+  {
+    printf("Elapsed time : %.3f seconds.\n", elapsed_time);
+  }
   // Cleanup
   free(a); free(b); free(c);
   cudaFree(d_a); cudaFree(d_b); cudaFree(d_c);

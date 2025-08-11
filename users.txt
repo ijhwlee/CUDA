@@ -1,0 +1,1 @@
+min106801:cuda:/ssd1/min106801:/bin/bash:password

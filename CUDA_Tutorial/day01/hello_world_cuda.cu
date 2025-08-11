@@ -4,6 +4,7 @@
 
 __global__ void mykernel(void)
 {
+  printf("Hello World from Device code!\n");
 }
 
 int main()
