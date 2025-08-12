@@ -85,7 +85,7 @@ int main()
   // Copy inputs to device
   cudaMemcpy(d_a, a, size, cudaMemcpyHostToDevice);
   // Launch add() kernel on GPU with N threads
-  stencil_1d<<<N/THREADS_PER_BLOCK, THREADS_PER_BLOCK>>>(d_a, d_c, N);
+  stencil_1d<<<(N + THREADS_PER_BLOCK - 1)/THREADS_PER_BLOCK, THREADS_PER_BLOCK>>>(d_a, d_c, N);
   // Copy result back to host
   cudaMemcpy(c, d_c, size, cudaMemcpyDeviceToHost);
   // Print the result
