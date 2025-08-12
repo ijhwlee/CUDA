@@ -21,19 +21,19 @@ void random_ints(int *a, int n)
   }
 }
 
-void print_elapsed(double elapsed_time)
+void print_elapsed(double elapsed_time, const char *msg)
 {
   if (elapsed_time < 1.0e-5)
   {
-    printf("Elapsed time : %.3f micro seconds.\n", elapsed_time*1.0e6);
+    printf("Elapsed time for %s : %.3f micro seconds.\n", msg, elapsed_time*1.0e6);
   }
   else if (elapsed_time < 1.0e-2)
   {
-    printf("Elapsed time : %.3f milli seconds.\n", elapsed_time*1.0e3);
+    printf("Elapsed time for %s : %.3f milli seconds.\n", msg, elapsed_time*1.0e3);
   }
   else
   {
-    printf("Elapsed time : %.3f seconds.\n", elapsed_time);
+    printf("Elapsed time for %s : %.3f seconds.\n", msg, elapsed_time);
   }
 }
 
@@ -46,7 +46,7 @@ int main()
   int *d_a, *d_b, *d_c;		// device copies of a, b, c
   int size = N * sizeof(int);	// array size in bytes
   int k;
-  clock_t start, end;
+  clock_t start, end, start_mem, end_mem;
   double elapsed_time;
 
   // Intialize random seed
@@ -63,16 +63,34 @@ int main()
   start = clock();
   cudaMemcpy(d_a, a, size, cudaMemcpyHostToDevice);
   cudaMemcpy(d_b, b, size, cudaMemcpyHostToDevice);
+  end_mem = clock();
   // Launch add() kernel on GPU with N threads
   add<<<N/THREADS_PER_BLOCK, THREADS_PER_BLOCK>>>(d_a, d_b, d_c, N);
   // Copy result back to host
+  start_mem = clock();
   cudaMemcpy(c, d_c, size, cudaMemcpyDeviceToHost);
   end = clock();
   // Print the result
   k = rand()%N;
   printf("Result: Size = %d, c[%d] = %d, a[%d] = %d, b[%d] = %d\n", N, k, c[k], k, a[k], k, b[k]);
   elapsed_time = ((double)(end - start)) / CLOCKS_PER_SEC;
-  print_elapsed(elapsed_time);
+  print_elapsed(elapsed_time, "Device operation including memory copy");
+  elapsed_time = ((double)(end_mem - start)) / CLOCKS_PER_SEC;
+  print_elapsed(elapsed_time, "Memory copy to Device");
+  elapsed_time = ((double)(end - start_mem)) / CLOCKS_PER_SEC;
+  print_elapsed(elapsed_time, "Memory copy to Host");
+  elapsed_time = ((double)(start_mem - end_mem)) / CLOCKS_PER_SEC;
+  print_elapsed(elapsed_time, "Device operations");
+  start = clock();
+  for(int idx = 0; idx < N; idx++)
+  {
+    c[idx] = a[idx] + b[idx];
+  }
+  end = clock();
+  k = rand()%N;
+  printf("Result: c[%d] is %d, a[%d] = %d, b[%d] = %d\n", k, c[k], k, a[k], k, b[k]);
+  elapsed_time = ((double)(end - start)) / CLOCKS_PER_SEC;
+  print_elapsed(elapsed_time, "C for-loop");
   // Cleanup
   free(a); free(b); free(c);
   cudaFree(d_a); cudaFree(d_b); cudaFree(d_c);

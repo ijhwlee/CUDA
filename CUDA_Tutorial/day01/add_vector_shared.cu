@@ -21,7 +21,10 @@ __global__ void stencil_1d(int *in, int *out, int n)
   temp[lindex] = in[gindex];
   if (threadIdx.x < RADIUS)
   {
-    temp[lindex - RADIUS] = in[gindex - RADIUS];
+    if (gindex - RADIUS < 0)
+      temp[lindex - RADIUS] = in[0];
+    else
+      temp[lindex - RADIUS] = in[gindex - RADIUS];
     if (gindex + THREADS_PER_BLOCK >= n)
     {
       temp[lindex + THREADS_PER_BLOCK] = in[n-1];  // the last element
