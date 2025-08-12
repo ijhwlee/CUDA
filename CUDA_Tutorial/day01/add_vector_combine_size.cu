@@ -37,7 +37,7 @@ void print_elapsed(double elapsed_time, const char *msg)
   }
 }
 
-#define N (2048*2048)
+#define N 4190000 //(2048*2048)
 #define THREADS_PER_BLOCK 512
 
 int main()
@@ -65,7 +65,7 @@ int main()
   cudaMemcpy(d_b, b, size, cudaMemcpyHostToDevice);
   end_mem = clock();
   // Launch add() kernel on GPU with N threads
-  add<<<N/THREADS_PER_BLOCK, THREADS_PER_BLOCK>>>(d_a, d_b, d_c, N);
+  add<<<(N + THREADS_PER_BLOCK -1)/THREADS_PER_BLOCK, THREADS_PER_BLOCK>>>(d_a, d_b, d_c, N);
   // Copy result back to host
   start_mem = clock();
   cudaMemcpy(c, d_c, size, cudaMemcpyDeviceToHost);
