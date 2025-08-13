@@ -130,3 +130,4 @@ if dtime < 0.01:
 else:
     unit = "seconds"
 print(f'Elapsed time in CUDA Kernel with size {w1}X{h1}: {dtime:.3f} {unit}')
+
