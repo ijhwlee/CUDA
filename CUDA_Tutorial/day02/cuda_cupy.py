@@ -10,6 +10,14 @@ def print_elapsed(elapsed):
     else:
         print(f"Elapsed time : {elapsed:.3f} seconds.")
 
+def print_process(elapsed):
+    if elapsed < 1.0e-5:
+        print(f"Process time : {elapsed*1.0e6:.3f} micro seconds.")
+    elif elapsed < 1.0e-2:
+        print(f"Process time : {elapsed*1.0e3:.3f} milli seconds.")
+    else:
+        print(f"Process time : {elapsed:.3f} seconds.")
+
 def check_result(a, b):
     diff = np.square(a) - b
     diff = np.sum(diff)
@@ -34,17 +42,23 @@ squared = cu.ElementwiseKernel(
    'z = x * x',
    'squared')
 start = time.perf_counter()
+p_start = time.process_time()
 z = squared(array_device)
+p_end = time.process_time()
 end = time.perf_counter()
 print("Elapsed time for square")
 print_elapsed(end - start)
+print_process(p_end - p_start)
 z_cpu = cu.asnumpy(z)
 
 start = time.perf_counter()
+p_start = time.process_time()
 z1 = square_for(array_cpu)
+p_end = time.process_time()
 end = time.perf_counter()
 print("Elapsed time for squarei with python for-loop")
 print_elapsed(end - start)
+print_process(p_end - p_start)
 
 #print(f"a = {array_cpu}")
 #print(f"z = {z}")
