@@ -21,7 +21,7 @@ plt.savefig('mnist_train_00')
 # define the neural network model
 my_model = tf.keras.models.Sequential()
 my_model.add(tf.keras.layers.Flatten(input_shape=(28, 28)))
-my_model.add(tf.keras.layers.Dense(128, activation='relu'))
+my_model.add(tf.keras.layers.Dense(256, activation='relu'))
 my_model.add(tf.keras.layers.Dense(10, activation='softmax'))
 
 # compile the model
