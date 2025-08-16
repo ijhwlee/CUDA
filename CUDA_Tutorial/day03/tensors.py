@@ -1,9 +1,12 @@
 # import libraries
 import torch
 import numpy as np
+import time
+from ijutils import format_elapsed
 
 # Initialize a tensor
 ## directly from data
+start = time.perf_counter()
 data = [[1,2], [3,4]]
 x_data = torch.tensor(data)
 
@@ -95,3 +98,6 @@ t = torch.from_numpy(n)
 np.add(n, 1, out=n)
 print(f"t: {t}")
 print(f"n: {n}")
+
+end = time.perf_counter()
+print(f"Elapsed time : {format_elapsed(end - start)}")

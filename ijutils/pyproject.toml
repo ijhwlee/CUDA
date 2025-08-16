@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ijutils"
+version = "0.1.0"
+description = "Utility functions for image and CUDA processing"
+authors = [{ name = "Hyung Lee", email = "ijhwlee@gmail.com" }]
+license = { text = "MIT" }
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/ijhwlee/CUDA"
